@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import {
   BrainCircuit, LayoutDashboard, DollarSign, TrendingUp,
   Users, CreditCard, FileText, Settings, Bell, Search, LogOut,
-  PieChart, ArrowUpRight, ArrowDownRight, BarChart3
+  PieChart, ArrowUpRight, ArrowDownRight, BarChart3, Menu, X
 } from 'lucide-react';
 import '../dashboard/DashboardLayout.css';
 import './FinanceDashboard.css';
@@ -21,13 +22,25 @@ const navItems = [
 
 export default function FinanceLayout({ children }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="dashboard-layout">
-      <aside className="dashboard-sidebar">
-        <Link href="/" className="sidebar-brand">
-          <BrainCircuit className="sidebar-logo-icon" size={26} />
-          <span>NEXA<span className="accent">EDU</span></span>
-        </Link>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="mobile-sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+
+      <aside className={`dashboard-sidebar ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+        <div className="sidebar-brand-wrapper">
+          <Link href="/" className="sidebar-brand" onClick={() => setIsMobileMenuOpen(false)}>
+            <BrainCircuit className="sidebar-logo-icon" size={26} />
+            <span>NEXA<span className="accent">EDU</span></span>
+          </Link>
+          <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
+            <X size={24} color="#6b7280" />
+          </button>
+        </div>
 
         <div className="sync-status" style={{ background: '#dcfce7', borderColor: '#bbf7d0' }}>
           <div style={{
@@ -46,7 +59,7 @@ export default function FinanceLayout({ children }) {
         <p className="nav-section-label">Menu Keuangan</p>
         <nav className="sidebar-nav">
           {navItems.map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href} className={`nav-link ${pathname === href ? 'active' : ''}`}>
+            <Link key={href} href={href} className={`nav-link ${pathname === href ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
               <Icon size={18} /> {label}
             </Link>
           ))}
@@ -63,6 +76,17 @@ export default function FinanceLayout({ children }) {
 
       <main className="dashboard-main">
         <header className="dashboard-header">
+          {/* Mobile Menu Button */}
+          <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+            <Menu size={24} color="#1a1a2e" />
+          </button>
+
+          {/* Mobile Logo */}
+          <Link href="/" className="mobile-header-brand">
+            <BrainCircuit className="sidebar-logo-icon" size={24} />
+            <span>NEXA<span className="accent">EDU</span></span>
+          </Link>
+
           <div className="header-tabs">
             <span style={{ fontWeight: 700, color: '#1a1a2e', fontSize: '1rem' }}>
               💰 Dashboard Keuangan

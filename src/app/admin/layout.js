@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { 
   BrainCircuit, 
   ShieldAlert, 
@@ -10,21 +11,34 @@ import {
   Database, 
   Activity, 
   LogOut,
-  DollarSign
+  DollarSign,
+  Menu,
+  X
 } from 'lucide-react';
 import '../dashboard/DashboardLayout.css';
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className="dashboard-layout" style={{ '--accent-color': '#ef4444' }}>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="mobile-sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="dashboard-sidebar" style={{ borderRight: '1px solid rgba(239, 68, 68, 0.15)' }}>
-        <Link href="/" className="sidebar-brand">
-          <ShieldAlert className="sidebar-logo-icon" size={24} color="#ef4444" />
-          <span>NEXA<span style={{ color: '#ef4444' }}>ADMIN</span></span>
-        </Link>
+      <aside className={`dashboard-sidebar ${isMobileMenuOpen ? 'mobile-active' : ''}`} style={{ borderRight: '1px solid rgba(239, 68, 68, 0.15)' }}>
+        <div className="sidebar-brand-wrapper">
+          <Link href="/" className="sidebar-brand" onClick={() => setIsMobileMenuOpen(false)}>
+            <ShieldAlert className="sidebar-logo-icon" size={24} color="#ef4444" />
+            <span>NEXA<span style={{ color: '#ef4444' }}>ADMIN</span></span>
+          </Link>
+          <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
+            <X size={24} color="#6b7280" />
+          </button>
+        </div>
 
         <div className="sync-status" style={{ background: '#fef2f2', border: '1px solid #fecaca' }}>
           <div className="sync-icon-wrapper" style={{ background: '#fee2e2', color: '#ef4444' }}>
@@ -37,16 +51,16 @@ export default function AdminLayout({ children }) {
         </div>
 
         <nav className="sidebar-nav">
-          <Link href="/admin" className={`nav-link ${pathname === '/admin' ? 'active' : ''}`}>
+          <Link href="/admin" className={`nav-link ${pathname === '/admin' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <Activity size={18} /> Network Overview
           </Link>
-          <Link href="/admin/users" className={`nav-link ${pathname === '/admin/users' ? 'active' : ''}`}>
+          <Link href="/admin/users" className={`nav-link ${pathname === '/admin/users' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <Users size={18} /> User Management
           </Link>
-          <Link href="/admin/ai-models" className={`nav-link ${pathname === '/admin/ai-models' ? 'active' : ''}`}>
+          <Link href="/admin/ai-models" className={`nav-link ${pathname === '/admin/ai-models' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <BrainCircuit size={18} /> AI Model Config
           </Link>
-          <Link href="/admin/database" className={`nav-link ${pathname === '/admin/database' ? 'active' : ''}`}>
+          <Link href="/admin/database" className={`nav-link ${pathname === '/admin/database' ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
             <Database size={18} /> Database Logs
           </Link>
         </nav>
@@ -64,6 +78,17 @@ export default function AdminLayout({ children }) {
       <main className="dashboard-main">
         {/* Header */}
         <header className="dashboard-header" style={{ borderBottom: '1px solid #f0f0f8' }}>
+          {/* Mobile Menu Button */}
+          <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+            <Menu size={24} color="#1a1a2e" />
+          </button>
+
+          {/* Mobile Logo */}
+          <Link href="/" className="mobile-header-brand">
+            <ShieldAlert className="sidebar-logo-icon" size={24} color="#ef4444" />
+            <span>NEXA<span style={{ color: '#ef4444' }}>ADMIN</span></span>
+          </Link>
+
           <div className="header-tabs">
             <div className="header-tab active" style={{ borderBottomColor: '#ef4444', color: '#ef4444', fontWeight: 700 }}>Master Control</div>
             <div className="header-tab">Security Logs</div>

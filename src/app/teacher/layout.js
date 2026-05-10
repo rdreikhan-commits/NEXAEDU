@@ -6,7 +6,8 @@ import { useState } from 'react';
 import {
   BrainCircuit, LayoutDashboard, BookOpen, Users, GraduationCap,
   Calendar, MessageSquare, FileText, BarChart2, Settings,
-  Bell, Search, LogOut, PlusCircle, Video, Star, HelpCircle
+  Bell, Search, LogOut, PlusCircle, Video, Star, HelpCircle,
+  Menu, X
 } from 'lucide-react';
 import '../dashboard/DashboardLayout.css';
 import './TeacherDashboard.css';
@@ -23,13 +24,25 @@ const navItems = [
 
 export default function TeacherLayout({ children }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="dashboard-layout">
-      <aside className="dashboard-sidebar">
-        <Link href="/" className="sidebar-brand">
-          <BrainCircuit className="sidebar-logo-icon" size={26} />
-          <span>NEXA<span className="accent">EDU</span></span>
-        </Link>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="mobile-sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+
+      <aside className={`dashboard-sidebar ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+        <div className="sidebar-brand-wrapper">
+          <Link href="/" className="sidebar-brand" onClick={() => setIsMobileMenuOpen(false)}>
+            <BrainCircuit className="sidebar-logo-icon" size={26} />
+            <span>NEXA<span className="accent">EDU</span></span>
+          </Link>
+          <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
+            <X size={24} color="#6b7280" />
+          </button>
+        </div>
 
         <div className="sync-status" style={{ background: '#fef3c7', borderColor: '#fde68a' }}>
           <div className="sync-icon-wrapper" style={{ background: 'url("https://i.pravatar.cc/150?img=33") center/cover', width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0 }}></div>
@@ -42,7 +55,7 @@ export default function TeacherLayout({ children }) {
         <p className="nav-section-label">Menu Pengajar</p>
         <nav className="sidebar-nav">
           {navItems.map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href} className={`nav-link ${pathname === href ? 'active' : ''}`}>
+            <Link key={href} href={href} className={`nav-link ${pathname === href ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
               <Icon size={18} /> {label}
             </Link>
           ))}
@@ -69,6 +82,17 @@ export default function TeacherLayout({ children }) {
 
       <main className="dashboard-main">
         <header className="dashboard-header">
+          {/* Mobile Menu Button */}
+          <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+            <Menu size={24} color="#1a1a2e" />
+          </button>
+
+          {/* Mobile Logo */}
+          <Link href="/" className="mobile-header-brand">
+            <BrainCircuit className="sidebar-logo-icon" size={24} />
+            <span>NEXA<span className="accent">EDU</span></span>
+          </Link>
+
           <div className="header-tabs">
             <span style={{ fontWeight: 700, color: '#1a1a2e', fontSize: '1rem' }}>Portal Pengajar</span>
           </div>
