@@ -206,6 +206,68 @@ export default function FinanceDashboard() {
           </div>
           </div>
         )}
+
+        {/* Custom Analytics View */}
+        {isAnalytics && !isHome && (
+          <div className="finance-section" style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0 }}><Activity size={18} color="#f59e0b" /> Analisis Konversi & Retensi</h3>
+              <select style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff' }}>
+                <option>Filter: Q2 2026</option>
+              </select>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+              <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <h4 style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '15px' }}>Funnel Pendaftaran Siswa (Bulan Ini)</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', textAlign: 'center', fontSize: '0.85rem' }}>
+                  <div style={{ background: '#e0e7ff', padding: '12px', borderRadius: '8px', width: '100%' }}>Pengunjung Baru (145k)</div>
+                  <div style={{ background: '#c7d2fe', padding: '12px', borderRadius: '8px', width: '80%', margin: '0 auto' }}>Daftar Akun Gratis (32k)</div>
+                  <div style={{ background: '#a5b4fc', padding: '12px', borderRadius: '8px', width: '60%', margin: '0 auto' }}>Mulai Trial Premium (18k)</div>
+                  <div style={{ background: '#818cf8', padding: '12px', borderRadius: '8px', width: '40%', margin: '0 auto', color: '#fff', fontWeight: 'bold' }}>Berlangganan (4.2k)</div>
+                </div>
+              </div>
+              <div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <h4 style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '15px' }}>User Engagement Metrics</h4>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0' }}><span style={{ color: '#475569' }}>Daily Active Users (DAU)</span><strong style={{ color: '#1e293b' }}>24,500</strong></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0' }}><span style={{ color: '#475569' }}>Avg Session Duration</span><strong style={{ color: '#1e293b' }}>45m 12s</strong></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0' }}><span style={{ color: '#475569' }}>Bounce Rate</span><strong style={{ color: '#16a34a' }}>24.2%</strong></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0' }}><span style={{ color: '#475569' }}>Course Completion Rate</span><strong style={{ color: '#1e293b' }}>68%</strong></div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Custom Revenue View */}
+        {isRevenue && !isHome && (
+          <div className="finance-section" style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0 }}><TrendingUp size={18} color="#10b981" /> Tren Pendapatan Tahunan (Proyeksi Q3)</h3>
+              <button style={{ background: '#f0fdf4', color: '#16a34a', border: 'none', padding: '6px 12px', borderRadius: '8px', fontWeight: 600, fontSize: '0.8rem' }}>+12.4% vs Q2</button>
+            </div>
+            
+            <div style={{ height: '220px', background: 'linear-gradient(to top, rgba(16,185,129,0.1), transparent)', borderBottom: '2px solid #10b981', position: 'relative', marginTop: '20px', borderRadius: '8px' }}>
+              <div style={{ position: 'absolute', bottom: '20%', left: '10%', width: '12px', height: '12px', background: '#10b981', border: '2px solid #fff', borderRadius: '50%', zIndex: 2 }}></div>
+              <div style={{ position: 'absolute', bottom: '30%', left: '30%', width: '12px', height: '12px', background: '#10b981', border: '2px solid #fff', borderRadius: '50%', zIndex: 2 }}></div>
+              <div style={{ position: 'absolute', bottom: '60%', left: '50%', width: '12px', height: '12px', background: '#10b981', border: '2px solid #fff', borderRadius: '50%', zIndex: 2 }}></div>
+              <div style={{ position: 'absolute', bottom: '45%', left: '70%', width: '12px', height: '12px', background: '#10b981', border: '2px solid #fff', borderRadius: '50%', zIndex: 2 }}></div>
+              <div style={{ position: 'absolute', bottom: '85%', left: '90%', width: '12px', height: '12px', background: '#10b981', border: '2px solid #fff', borderRadius: '50%', zIndex: 2 }}></div>
+              
+              <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+                <path d="M 10% 80% L 30% 70% L 50% 40% L 70% 55% L 90% 15%" fill="none" stroke="#10b981" strokeWidth="3" />
+              </svg>
+              
+              <div style={{ position: 'absolute', bottom: '-30px', display: 'flex', justifyContent: 'space-between', width: '100%', color: '#64748b', fontSize: '0.85rem', fontWeight: 600, padding: '0 8%' }}>
+                <span>Januari</span><span>Februari</span><span>Maret</span><span>April</span><span>Mei</span>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: '50px', background: '#f8fafc', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: 1.5 }}>
+                Berdasarkan analitik Q3, peningkatan tertinggi disumbang oleh langganan <strong>Premium Tahunan</strong> (+20%). Penjualan bootcamp menurun sedikit di bulan April namun kembali normal di Mei. Disarankan untuk meluncurkan program bundle pada bulan Juni.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* MODALS */}
