@@ -127,7 +127,7 @@ export default function TeacherPage() {
           {/* Zoom Sessions */}
           <div className="teacher-section">
             <h3><Video size={18} color="#2563eb" /> Zoom Session Mendatang</h3>
-            {zoomSessions.map(z => (
+            {zooms.map(z => (
               <div key={z.title} className="zoom-card">
                 <div className="zoom-card-icon">
                   <Video size={20} color="#fff" />
