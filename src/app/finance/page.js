@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
   DollarSign, TrendingUp, CreditCard, Users, ArrowUpRight, ArrowDownRight,
@@ -36,6 +37,14 @@ const subscriptionPlans = [
 ];
 
 export default function FinanceDashboard() {
+  const pathname = usePathname() || '/finance';
+  const isHome = pathname === '/finance';
+  const isAnalytics = pathname.includes('/analytics');
+  const isReports = pathname.includes('/reports');
+  const isRevenue = pathname.includes('/revenue');
+  const isSubscriptions = pathname.includes('/subscriptions');
+  const isTransactions = pathname.includes('/transactions');
+  
   const [dateRange, setDateRange] = useState('Bulan Ini');
   const [transactions, setTransactions] = useState(initialTransactions);
   const [showModal, setShowModal] = useState({ type: null, data: null });
@@ -82,29 +91,35 @@ export default function FinanceDashboard() {
         </div>
       </div>
 
-      {/* KPIs */}
-      <div className="finance-kpi-grid">
-        {kpis.map((kpi, idx) => (
-          <div key={idx} className="finance-kpi-card">
-            <div className="kpi-header">
-              <div className="kpi-icon" style={{ background: kpi.bg }}>
-                <kpi.icon size={20} color={kpi.color} />
-              </div>
-              <div className={`kpi-change ${kpi.trend}`}>
-                {kpi.trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                {kpi.change}
-              </div>
-            </div>
-            <div className="kpi-value">{kpi.value}</div>
-            <div className="kpi-label">{kpi.label}</div>
-          </div>
-        ))}
-      </div>
 
-      <div className="finance-main-grid">
+
+      {/* KPIs */}
+      {(isHome || isAnalytics || isRevenue) && (
+        <div className="finance-kpi-grid">
+          {kpis.map((kpi, idx) => (
+            <div key={idx} className="finance-kpi-card">
+              <div className="kpi-header">
+                <div className="kpi-icon" style={{ background: kpi.bg }}>
+                  <kpi.icon size={20} color={kpi.color} />
+                </div>
+                <div className={`kpi-change ${kpi.trend}`}>
+                  {kpi.trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                  {kpi.change}
+                </div>
+              </div>
+              <div className="kpi-value">{kpi.value}</div>
+              <div className="kpi-label">{kpi.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className={isHome ? "finance-main-grid" : ""} style={{ display: 'grid', gridTemplateColumns: isHome ? '1fr 1fr' : '1fr', gap: '20px' }}>
         {/* LEFT COLUMN */}
-        <div>
-          {/* Revenue by Category */}
+        {(isHome || isRevenue || isAnalytics || isSubscriptions) && (
+          <div>
+            {/* Revenue by Category */}
+            {(isHome || isRevenue || isAnalytics) && (
           <div className="finance-section">
             <h3><PieChart size={18} color="#7c3aed" /> Pendapatan per Kategori ({dateRange})</h3>
             <div className="revenue-bar-container">
@@ -120,10 +135,12 @@ export default function FinanceDashboard() {
                 </div>
               ))}
             </div>
-          </div>
+              </div>
+            )}
 
-          {/* Subscription Plans */}
-          <div className="finance-section">
+            {/* Subscription Plans */}
+            {(isHome || isSubscriptions) && (
+              <div className="finance-section">
             <h3><Crown size={18} color="#f59e0b" /> Performa Paket Langganan</h3>
             {subscriptionPlans.map((plan, idx) => (
               <div key={idx} className="sub-plan-card">
@@ -147,13 +164,16 @@ export default function FinanceDashboard() {
                 </div>
               </div>
             ))}
+            </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* RIGHT COLUMN */}
-        <div>
-          {/* Recent Transactions */}
-          <div className="finance-section">
+        {(isHome || isTransactions || isReports) && (
+          <div>
+            {/* Recent Transactions */}
+            <div className="finance-section">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h3 style={{ margin: 0 }}><DollarSign size={18} color="#16a34a" /> Transaksi Terbaru</h3>
               <button style={{ background: 'none', border: 'none', color: '#6c63ff', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>Lihat Semua</button>
@@ -184,7 +204,8 @@ export default function FinanceDashboard() {
               ))}
             </div>
           </div>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* MODALS */}

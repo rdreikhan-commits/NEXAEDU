@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
   Users, BookOpen, Video, MessageSquare, Star, TrendingUp,
@@ -43,7 +44,13 @@ const courses = [
 ];
 
 export default function TeacherPage() {
-  const [activeTab, setActiveTab] = useState('beranda');
+  const pathname = usePathname() || '/teacher';
+  const isHome = pathname === '/teacher';
+  const isCourses = pathname.includes('/courses');
+  const isStudents = pathname.includes('/students');
+  const isConsults = pathname.includes('/consultations');
+  const isZoom = pathname.includes('/zoom');
+  const isGrades = pathname.includes('/grades') || pathname.includes('/reports');
   
   // Interactive States
   const [consults, setConsults] = useState(initialConsultRequests);
@@ -78,24 +85,28 @@ export default function TeacherPage() {
       </div>
 
       {/* Stat Cards */}
-      <div className="teacher-stat-grid">
-        {stats.map(s => (
-          <div key={s.label} className="teacher-stat-card">
-            <div className="teacher-stat-icon" style={{ background: s.bg }}>
-              <s.icon size={20} color={s.color} />
+      {isHome && (
+        <div className="teacher-stat-grid">
+          {stats.map(s => (
+            <div key={s.label} className="teacher-stat-card">
+              <div className="teacher-stat-icon" style={{ background: s.bg }}>
+                <s.icon size={20} color={s.color} />
+              </div>
+              <div className="teacher-stat-value">{s.value}</div>
+              <div className="teacher-stat-label">{s.label}</div>
+              <div style={{ fontSize: '0.75rem', color: s.color, fontWeight: 600 }}>{s.change}</div>
             </div>
-            <div className="teacher-stat-value">{s.value}</div>
-            <div className="teacher-stat-label">{s.label}</div>
-            <div style={{ fontSize: '0.75rem', color: s.color, fontWeight: 600 }}>{s.change}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      <div className="teacher-main-grid">
+      <div className={isHome ? "teacher-main-grid" : ""} style={{ display: 'grid', gridTemplateColumns: isHome ? '1.4fr 1fr' : '1fr', gap: '20px' }}>
         {/* LEFT */}
-        <div>
-          {/* Mata Kuliah Saya */}
-          <div className="teacher-section">
+        {(isHome || isCourses || isZoom || isGrades) && (
+          <div>
+            {/* Mata Kuliah Saya */}
+            {(isHome || isCourses || isGrades) && (
+            <div className="teacher-section">
             <h3><BookOpen size={18} color="#7c3aed" /> Mata Kuliah Saya</h3>
             {courses.map(c => (
               <div key={c.name} style={{ marginBottom: '16px' }}>
@@ -122,10 +133,12 @@ export default function TeacherPage() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+            )}
 
-          {/* Zoom Sessions */}
-          <div className="teacher-section">
+            {/* Zoom Sessions */}
+            {(isHome || isZoom) && (
+              <div className="teacher-section">
             <h3><Video size={18} color="#2563eb" /> Zoom Session Mendatang</h3>
             {zooms.map(z => (
               <div key={z.title} className="zoom-card">
@@ -153,15 +166,18 @@ export default function TeacherPage() {
               color: '#7c3aed', fontWeight: 600, fontSize: '0.85rem',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
             }}>
-              <PlusCircle size={15} /> Jadwalkan Sesi Baru
-            </button>
+              </button>
+            </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* RIGHT */}
-        <div>
-          {/* Konsultasi */}
-          <div className="teacher-section">
+        {(isHome || isConsults || isStudents || isCourses || isGrades) && (
+          <div>
+            {/* Konsultasi */}
+            {(isHome || isConsults) && (
+              <div className="teacher-section">
             <h3><MessageSquare size={18} color="#d97706" /> Permintaan Konsultasi</h3>
             {consults.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280', fontSize: '0.9rem' }}>
@@ -188,8 +204,10 @@ export default function TeacherPage() {
               </div>
             ))}
           </div>
+          )}
 
           {/* Mahasiswa Perlu Perhatian */}
+          {(isHome || isStudents || isGrades) && (
           <div className="teacher-section">
             <h3><AlertCircle size={18} color="#ef4444" /> Mahasiswa Perlu Perhatian</h3>
             {recentStudents.filter(s => s.status === 'perlu perhatian').map(s => (
@@ -221,8 +239,10 @@ export default function TeacherPage() {
               </div>
             ))}
           </div>
+          )}
 
           {/* Manajemen Modul & Kuis */}
+          {(isHome || isCourses) && (
           <div className="teacher-section">
             <h3><BookOpen size={18} color="#ec4899" /> Kelola Modul & Kuis Terpadu</h3>
             <div style={{ padding: '16px', background: '#fdf2f8', border: '1px dashed #fbcfe8', borderRadius: '12px', textAlign: 'center', marginBottom: '16px' }}>
@@ -245,9 +265,11 @@ export default function TeacherPage() {
                 <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>Draf · Belum ada soal</p>
               </div>
               <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#d97706', background: '#fef3c7', padding: '4px 8px', borderRadius: '8px' }}>Draf</span>
+              </div>
             </div>
+          )}
           </div>
-        </div>
+        )}
       </div>
 
       {/* MODALS */}
