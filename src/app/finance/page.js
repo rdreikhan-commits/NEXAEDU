@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   DollarSign, TrendingUp, CreditCard, Users, ArrowUpRight, ArrowDownRight,
-  PieChart, Activity, Crown, Calendar, Download, Filter
+  PieChart, Activity, Crown, Calendar, Download, Filter, CheckCircle, AlertCircle, Clock, X, FileText
 } from 'lucide-react';
 import './FinanceDashboard.css';
 
@@ -14,7 +14,7 @@ const kpis = [
   { label: 'Tingkat Churn', value: '2.4%', icon: Activity, color: '#ef4444', bg: '#fee2e2', trend: 'down', change: '-0.5%' },
 ];
 
-const recentTransactions = [
+const initialTransactions = [
   { id: 'TRX-9982', user: 'Alex Carter', plan: 'Premium Tahunan', amount: 'Rp 1.200.000', status: 'sukses', date: 'Hari ini, 14:30', iconBg: '#dcfce7', iconColor: '#16a34a' },
   { id: 'TRX-9981', user: 'Siti Rahayu', plan: 'Premium Bulanan', amount: 'Rp 150.000', status: 'sukses', date: 'Hari ini, 13:15', iconBg: '#dcfce7', iconColor: '#16a34a' },
   { id: 'TRX-9980', user: 'Budi Prasetyo', plan: 'Bootcamp UI/UX', amount: 'Rp 2.500.000', status: 'pending', date: 'Hari ini, 11:45', iconBg: '#fef3c7', iconColor: '#d97706' },
@@ -37,6 +37,23 @@ const subscriptionPlans = [
 
 export default function FinanceDashboard() {
   const [dateRange, setDateRange] = useState('Bulan Ini');
+  const [transactions, setTransactions] = useState(initialTransactions);
+  const [showModal, setShowModal] = useState({ type: null, data: null });
+
+  const handleTransactionAction = (id, newStatus) => {
+    setTransactions(transactions.map(t => {
+      if (t.id === id) {
+        return {
+          ...t,
+          status: newStatus,
+          iconBg: newStatus === 'sukses' ? '#dcfce7' : '#fee2e2',
+          iconColor: newStatus === 'sukses' ? '#16a34a' : '#ef4444'
+        };
+      }
+      return t;
+    }));
+    setShowModal({ type: null, data: null });
+  };
 
   return (
     <div style={{ animation: 'fadeIn 0.4s ease' }}>
@@ -54,7 +71,7 @@ export default function FinanceDashboard() {
           }}>
             <Calendar size={15} /> {dateRange}
           </button>
-          <button style={{
+          <button onClick={() => setShowModal({ type: 'export' })} style={{
             display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 16px',
             background: 'linear-gradient(135deg, #16a34a, #059669)', color: '#fff',
             border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem',
@@ -143,8 +160,8 @@ export default function FinanceDashboard() {
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {recentTransactions.map((trx, idx) => (
-                <div key={idx} className="transaction-row">
+              {transactions.map((trx, idx) => (
+                <div key={idx} className="transaction-row" style={{ cursor: trx.status === 'pending' ? 'pointer' : 'default' }} onClick={() => trx.status === 'pending' && setShowModal({ type: 'verify', data: trx })}>
                   <div className="transaction-icon" style={{ background: trx.iconBg }}>
                     {trx.status === 'sukses' ? <CheckCircle size={18} color={trx.iconColor} /> : 
                      trx.status === 'gagal' ? <AlertCircle size={18} color={trx.iconColor} /> : 
@@ -152,7 +169,10 @@ export default function FinanceDashboard() {
                   </div>
                   <div className="transaction-info">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div className="transaction-name">{trx.user}</div>
+                      <div className="transaction-name">
+                        {trx.user}
+                        {trx.status === 'pending' && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: '8px' }}>Perlu Verifikasi</span>}
+                      </div>
                       <div style={{ fontWeight: 800, fontSize: '0.9rem', color: trx.status === 'sukses' ? '#16a34a' : '#1a1a2e' }}>{trx.amount}</div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
@@ -166,11 +186,52 @@ export default function FinanceDashboard() {
           </div>
         </div>
       </div>
+
+      {/* MODALS */}
+      {showModal.type && (
+        <div onClick={() => setShowModal({ type: null, data: null })} style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)'
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: '#fff', borderRadius: '20px', padding: '30px', width: '90%', maxWidth: '450px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '1.2rem', color: '#1a1a2e' }}>
+                {showModal.type === 'export' ? 'Export Laporan Keuangan' : 'Verifikasi Transaksi'}
+              </h3>
+              <button onClick={() => setShowModal({ type: null, data: null })} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af' }}><X size={20}/></button>
+            </div>
+
+            {showModal.type === 'export' && (
+              <div style={{ textAlign: 'center' }}>
+                <FileText size={48} color="#16a34a" style={{ marginBottom: '15px' }} />
+                <p style={{ color: '#6b7280', fontSize: '0.95rem', marginBottom: '20px' }}>Pilih format laporan keuangan untuk diunduh:</p>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                  <button onClick={() => { alert('Laporan Excel berhasil diunduh!'); setShowModal({ type: null }); }} style={{ padding: '10px 20px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>.XLSX (Excel)</button>
+                  <button onClick={() => { alert('Laporan PDF berhasil diunduh!'); setShowModal({ type: null }); }} style={{ padding: '10px 20px', background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>.PDF</button>
+                </div>
+              </div>
+            )}
+
+            {showModal.type === 'verify' && (
+              <div>
+                <div style={{ background: '#f8fafc', padding: '15px', borderRadius: '12px', marginBottom: '20px' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#6b7280', marginBottom: '4px' }}>ID Transaksi: <strong>{showModal.data?.id}</strong></p>
+                  <p style={{ fontSize: '0.85rem', color: '#6b7280', marginBottom: '4px' }}>Pengguna: <strong>{showModal.data?.user}</strong></p>
+                  <p style={{ fontSize: '0.85rem', color: '#6b7280', marginBottom: '4px' }}>Item: <strong>{showModal.data?.plan}</strong></p>
+                  <p style={{ fontSize: '1.2rem', color: '#1a1a2e', fontWeight: 800, marginTop: '10px' }}>{showModal.data?.amount}</p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button onClick={() => handleTransactionAction(showModal.data.id, 'gagal')} style={{ flex: 1, padding: '12px', background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>Tolak Transaksi</button>
+                  <button onClick={() => handleTransactionAction(showModal.data.id, 'sukses')} style={{ flex: 1, padding: '12px', background: '#dcfce7', color: '#16a34a', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>Terima Pembayaran</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-// Temporary Lucide icon fallbacks since we used some new ones
-const CheckCircle = ({ size, color }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
-const AlertCircle = ({ size, color }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>;
-const Clock = ({ size, color }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
   Users, BookOpen, Video, MessageSquare, Star, TrendingUp,
   Clock, CheckCircle, AlertCircle, Calendar, Play, PlusCircle,
-  Crown, Award
+  Crown, Award, X, Check
 } from 'lucide-react';
 import './TeacherDashboard.css';
 
@@ -23,16 +23,16 @@ const recentStudents = [
   { name: 'Dimas Arya', course: 'Cloud & DevOps · Semester 5', progress: 33, avatar: '15', status: 'perlu perhatian' },
 ];
 
-const consultRequests = [
-  { name: 'Budi Prasetyo', topic: 'Kesulitan memahami Backpropagation di Neural Network', time: '10 menit lalu', urgent: true },
-  { name: 'Rina Kusumawati', topic: 'Request review skripsi bab 3', time: '1 jam lalu', urgent: false },
-  { name: 'Siti Rahayu', topic: 'Tanya soal ujian midterm', time: '2 jam lalu', urgent: false },
+const initialConsultRequests = [
+  { id: 1, name: 'Budi Prasetyo', topic: 'Kesulitan memahami Backpropagation di Neural Network', time: '10 menit lalu', urgent: true },
+  { id: 2, name: 'Rina Kusumawati', topic: 'Request review skripsi bab 3', time: '1 jam lalu', urgent: false },
+  { id: 3, name: 'Siti Rahayu', topic: 'Tanya soal ujian midterm', time: '2 jam lalu', urgent: false },
 ];
 
-const zoomSessions = [
-  { title: 'Machine Learning Fundamentals - Sesi 8', date: 'Besok, 09:00 WIB', students: 42, status: 'upcoming' },
-  { title: 'Review Proyek Akhir AI/ML', date: 'Senin, 14:00 WIB', students: 18, status: 'upcoming' },
-  { title: 'Tanya Jawab Sistem Basis Data', date: 'Rabu, 10:00 WIB', students: 35, status: 'upcoming' },
+const initialZoomSessions = [
+  { id: 1, title: 'Machine Learning Fundamentals - Sesi 8', date: 'Besok, 09:00 WIB', students: 42, status: 'upcoming' },
+  { id: 2, title: 'Review Proyek Akhir AI/ML', date: 'Senin, 14:00 WIB', students: 18, status: 'upcoming' },
+  { id: 3, title: 'Tanya Jawab Sistem Basis Data', date: 'Rabu, 10:00 WIB', students: 35, status: 'upcoming' },
 ];
 
 const courses = [
@@ -44,6 +44,20 @@ const courses = [
 
 export default function TeacherPage() {
   const [activeTab, setActiveTab] = useState('beranda');
+  
+  // Interactive States
+  const [consults, setConsults] = useState(initialConsultRequests);
+  const [zooms, setZooms] = useState(initialZoomSessions);
+  const [showModal, setShowModal] = useState({ type: null, data: null });
+
+  const handleReplyConsult = (id) => {
+    alert("Pesan balasan terkirim!");
+    setConsults(consults.filter(c => c.id !== id));
+  };
+
+  const handleStartZoom = (id) => {
+    setShowModal({ type: 'zoom', data: zooms.find(z => z.id === id) });
+  };
 
   return (
     <div style={{ animation: 'fadeIn 0.4s ease' }}>
@@ -53,7 +67,7 @@ export default function TeacherPage() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1a2e' }}>Selamat datang, Dr. Sarah 👋</h2>
           <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>Sabtu, 10 Mei 2026 · 1.248 mahasiswa aktif di kelas Anda</p>
         </div>
-        <button style={{
+        <button onClick={() => setShowModal({ type: 'add_module', data: null })} style={{
           display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 22px',
           background: 'linear-gradient(135deg, #7c3aed, #ec4899)', color: '#fff',
           border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem',
@@ -124,7 +138,7 @@ export default function TeacherPage() {
                     <Calendar size={12} style={{ marginRight: '4px', display: 'inline' }} />{z.date} · {z.students} peserta
                   </p>
                 </div>
-                <button style={{
+                <button onClick={() => handleStartZoom(z.id)} style={{
                   padding: '7px 16px', background: 'linear-gradient(135deg, #2563eb, #4f46e5)',
                   color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer',
                   fontSize: '0.8rem', fontWeight: 700
@@ -133,7 +147,7 @@ export default function TeacherPage() {
                 </button>
               </div>
             ))}
-            <button style={{
+            <button onClick={() => setShowModal({ type: 'schedule_zoom', data: null })} style={{
               width: '100%', padding: '10px', borderRadius: '10px', marginTop: '8px',
               border: '1.5px dashed #c4b5fd', background: 'transparent', cursor: 'pointer',
               color: '#7c3aed', fontWeight: 600, fontSize: '0.85rem',
@@ -149,8 +163,13 @@ export default function TeacherPage() {
           {/* Konsultasi */}
           <div className="teacher-section">
             <h3><MessageSquare size={18} color="#d97706" /> Permintaan Konsultasi</h3>
-            {consultRequests.map(c => (
-              <div key={c.name} className="consult-request">
+            {consults.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280', fontSize: '0.9rem' }}>
+                <CheckCircle size={24} color="#16a34a" style={{ marginBottom: '10px' }} />
+                <p>Semua konsultasi telah dibalas!</p>
+              </div>
+            ) : consults.map(c => (
+              <div key={c.id} className="consult-request">
                 <img src={`https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 20 + 10)}`} alt="" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
@@ -161,7 +180,7 @@ export default function TeacherPage() {
                   <p style={{ fontSize: '0.72rem', color: '#9ca3af', marginTop: '2px' }}>{c.time}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <button style={{
+                  <button onClick={() => setShowModal({ type: 'reply_consult', data: c })} style={{
                     padding: '6px 10px', background: '#dcfce7', color: '#16a34a',
                     border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem'
                   }}>Balas</button>
@@ -204,6 +223,64 @@ export default function TeacherPage() {
           </div>
         </div>
       </div>
+
+      {/* MODALS */}
+      {showModal.type && (
+        <div onClick={() => setShowModal({ type: null, data: null })} style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)'
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: '#fff', borderRadius: '20px', padding: '30px', width: '90%', maxWidth: '500px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '1.2rem', color: '#1a1a2e' }}>
+                {showModal.type === 'add_module' ? 'Tambah Materi Baru' : 
+                 showModal.type === 'zoom' ? 'Mulai Zoom Session' : 
+                 showModal.type === 'schedule_zoom' ? 'Jadwalkan Zoom Baru' :
+                 'Balas Konsultasi'}
+              </h3>
+              <button onClick={() => setShowModal({ type: null, data: null })} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af' }}><X size={20}/></button>
+            </div>
+
+            {showModal.type === 'add_module' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <input type="text" placeholder="Judul Modul" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <input type="text" placeholder="URL Video YouTube" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <button onClick={() => { alert('Materi berhasil ditambahkan!'); setShowModal({ type: null, data: null }); }} style={{ padding: '12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Simpan Materi</button>
+              </div>
+            )}
+
+            {showModal.type === 'zoom' && (
+              <div style={{ textAlign: 'center' }}>
+                <Video size={48} color="#2563eb" style={{ marginBottom: '15px' }} />
+                <h4>{showModal.data?.title}</h4>
+                <p style={{ color: '#6b7280', fontSize: '0.9rem', marginBottom: '20px' }}>Kamera dan mikrofon siap. Anda akan memulai sesi dengan {showModal.data?.students} peserta.</p>
+                <button onClick={() => { alert('Membuka aplikasi Zoom...'); setShowModal({ type: null, data: null }); }} style={{ padding: '12px 24px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '30px', fontWeight: 700, cursor: 'pointer' }}>Buka Zoom</button>
+              </div>
+            )}
+
+            {showModal.type === 'schedule_zoom' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <input type="text" placeholder="Topik Sesi" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <input type="datetime-local" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <button onClick={() => { alert('Sesi Zoom berhasil dijadwalkan!'); setShowModal({ type: null, data: null }); }} style={{ padding: '12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Buat Undangan</button>
+              </div>
+            )}
+
+            {showModal.type === 'reply_consult' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div style={{ background: '#f5f6fa', padding: '15px', borderRadius: '8px', fontSize: '0.9rem' }}>
+                  <strong>{showModal.data?.name}:</strong> {showModal.data?.topic}
+                </div>
+                <textarea rows={4} placeholder="Ketik balasan Anda di sini..." style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%', resize: 'vertical' }}></textarea>
+                <button onClick={() => { handleReplyConsult(showModal.data?.id); setShowModal({ type: null, data: null }); }} style={{ padding: '12px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Kirim Balasan</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
