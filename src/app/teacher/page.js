@@ -50,7 +50,8 @@ export default function TeacherPage() {
   const isStudents = pathname.includes('/students');
   const isConsults = pathname.includes('/consultations');
   const isZoom = pathname.includes('/zoom');
-  const isGrades = pathname.includes('/grades') || pathname.includes('/reports');
+  const isGrades = pathname.includes('/grades');
+  const isReports = pathname.includes('/reports');
   
   // Interactive States
   const [consults, setConsults] = useState(initialConsultRequests);
@@ -102,10 +103,10 @@ export default function TeacherPage() {
 
       <div className={isHome ? "teacher-main-grid" : ""} style={{ display: 'grid', gridTemplateColumns: isHome ? '1.4fr 1fr' : '1fr', gap: '20px' }}>
         {/* LEFT */}
-        {(isHome || isCourses || isZoom || isGrades) && (
+        {(isHome || isCourses || isZoom) && (
           <div>
             {/* Mata Kuliah Saya */}
-            {(isHome || isCourses || isGrades) && (
+            {(isHome || isCourses) && (
             <div className="teacher-section">
             <h3><BookOpen size={18} color="#7c3aed" /> Mata Kuliah Saya</h3>
             {courses.map(c => (
@@ -173,7 +174,7 @@ export default function TeacherPage() {
         )}
 
         {/* RIGHT */}
-        {(isHome || isConsults || isStudents || isCourses || isGrades) && (
+        {(isHome || isConsults || isStudents || isCourses) && (
           <div>
             {/* Konsultasi */}
             {(isHome || isConsults) && (
@@ -207,7 +208,7 @@ export default function TeacherPage() {
           )}
 
           {/* Mahasiswa Perlu Perhatian */}
-          {(isHome || isStudents || isGrades) && (
+          {(isHome || isStudents) && (
           <div className="teacher-section">
             <h3><AlertCircle size={18} color="#ef4444" /> Mahasiswa Perlu Perhatian</h3>
             {recentStudents.filter(s => s.status === 'perlu perhatian').map(s => (
@@ -268,6 +269,112 @@ export default function TeacherPage() {
               </div>
             </div>
           )}
+          </div>
+        )}
+
+        {/* Custom Grades View */}
+        {isGrades && !isHome && (
+          <div className="teacher-section" style={{ gridColumn: '1 / -1' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0 }}><Star size={18} color="#f59e0b" /> Manajemen Nilai & Penilaian</h3>
+              <button style={{ padding: '8px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Export CSV</button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '24px' }}>
+              <div style={{ background: '#fef3c7', padding: '15px', borderRadius: '10px', border: '1px solid #fde68a' }}>
+                <p style={{ color: '#d97706', fontSize: '0.85rem', fontWeight: 600 }}>Rata-rata Kelas</p>
+                <h4 style={{ fontSize: '1.8rem', color: '#b45309', margin: '5px 0' }}>82.5</h4>
+              </div>
+              <div style={{ background: '#dcfce7', padding: '15px', borderRadius: '10px', border: '1px solid #bbf7d0' }}>
+                <p style={{ color: '#16a34a', fontSize: '0.85rem', fontWeight: 600 }}>Tingkat Kelulusan</p>
+                <h4 style={{ fontSize: '1.8rem', color: '#15803d', margin: '5px 0' }}>94%</h4>
+              </div>
+              <div style={{ background: '#fee2e2', padding: '15px', borderRadius: '10px', border: '1px solid #fecaca' }}>
+                <p style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 600 }}>Perlu Remedial</p>
+                <h4 style={{ fontSize: '1.8rem', color: '#b91c1c', margin: '5px 0' }}>12 Siswa</h4>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#64748b' }}>
+                    <th style={{ padding: '12px 0' }}>Nama Mahasiswa</th>
+                    <th style={{ padding: '12px 0' }}>Mata Kuliah</th>
+                    <th style={{ padding: '12px 0' }}>Tugas</th>
+                    <th style={{ padding: '12px 0' }}>Kuis</th>
+                    <th style={{ padding: '12px 0' }}>Nilai Akhir</th>
+                    <th style={{ padding: '12px 0' }}>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentStudents.map((s, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '12px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img src={`https://i.pravatar.cc/150?img=${s.avatar}`} style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover' }} alt=""/>
+                        <span style={{ fontWeight: 600, color: '#1e293b' }}>{s.name}</span>
+                      </td>
+                      <td style={{ padding: '12px 0', color: '#475569', fontSize: '0.85rem' }}>{s.course.split('·')[0]}</td>
+                      <td style={{ padding: '12px 0', color: '#475569' }}>{Math.floor(s.progress * 0.9)}</td>
+                      <td style={{ padding: '12px 0', color: '#475569' }}>{Math.floor(s.progress * 1.1 > 100 ? 100 : s.progress * 1.1)}</td>
+                      <td style={{ padding: '12px 0' }}>
+                        <span style={{ background: s.progress >= 70 ? '#dcfce7' : '#fee2e2', color: s.progress >= 70 ? '#16a34a' : '#ef4444', padding: '4px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.8rem' }}>
+                          {s.progress >= 85 ? 'A' : s.progress >= 70 ? 'B' : s.progress >= 50 ? 'C' : 'D'}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px 0' }}>
+                        <button style={{ color: '#3b82f6', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>Edit Nilai</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Custom Reports View */}
+        {isReports && !isHome && (
+          <div className="teacher-section" style={{ gridColumn: '1 / -1' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0 }}><TrendingUp size={18} color="#7c3aed" /> Laporan Kinerja Akademik</h3>
+              <select style={{ padding: '8px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff' }}><option>Semester Ganjil 2026</option></select>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+              <div style={{ padding: '20px', border: '1px solid #e2e8f0', borderRadius: '12px', background: '#f8fafc' }}>
+                <h4 style={{ color: '#475569', marginBottom: '15px' }}>Distribusi Penilaian Anda (Feedback Mahasiswa)</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
+                  <div style={{ width: '45px', fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>5 Star</div>
+                  <div style={{ flex: 1, height: '12px', background: '#e2e8f0', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: '75%', height: '100%', background: '#f59e0b', borderRadius: '6px' }}></div>
+                  </div>
+                  <div style={{ width: '35px', color: '#64748b', fontSize: '0.85rem', textAlign: 'right' }}>75%</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '12px' }}>
+                  <div style={{ width: '45px', fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>4 Star</div>
+                  <div style={{ flex: 1, height: '12px', background: '#e2e8f0', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: '20%', height: '100%', background: '#f59e0b', borderRadius: '6px' }}></div>
+                  </div>
+                  <div style={{ width: '35px', color: '#64748b', fontSize: '0.85rem', textAlign: 'right' }}>20%</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '45px', fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>3 Star</div>
+                  <div style={{ flex: 1, height: '12px', background: '#e2e8f0', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: '5%', height: '100%', background: '#f59e0b', borderRadius: '6px' }}></div>
+                  </div>
+                  <div style={{ width: '35px', color: '#64748b', fontSize: '0.85rem', textAlign: 'right' }}>5%</div>
+                </div>
+              </div>
+              
+              <div style={{ padding: '20px', border: '1px solid #e2e8f0', borderRadius: '12px', background: '#f8fafc' }}>
+                <h4 style={{ color: '#475569', marginBottom: '15px' }}>Rangkuman Analitik</h4>
+                <p style={{ color: '#334155', lineHeight: 1.6, fontSize: '0.9rem' }}>
+                  Berdasarkan data aktivitas semester ini, tingkat partisipasi mahasiswa dalam kelas Anda naik <strong>12%</strong>. Materi <span style={{ color: '#7c3aed', fontWeight: 600 }}>Python untuk Data Science</span> memiliki tingkat retensi paling tinggi (81%). Kami menyarankan Anda untuk memperbanyak sesi praktek pada materi <span style={{ color: '#ef4444', fontWeight: 600 }}>Deep Learning</span> untuk mendongkrak pemahaman mahasiswa.
+                </p>
+                <button style={{ marginTop: '20px', width: '100%', padding: '12px', background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 10px rgba(124,58,237,0.3)' }}>Unduh Laporan Lengkap (.PDF)</button>
+              </div>
+            </div>
           </div>
         )}
       </div>
