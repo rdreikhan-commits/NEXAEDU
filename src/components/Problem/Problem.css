@@ -1,0 +1,142 @@
+.problem-section {
+  padding: 100px 2rem;
+  position: relative;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-header {
+  margin-bottom: 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.problem-card {
+  padding: 40px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.problem-card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 15px 40px rgba(124, 58, 237, 0.15);
+}
+
+.problem-stat {
+  font-size: 4rem;
+  font-family: var(--font-outfit);
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.04);
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  line-height: 1;
+}
+
+.problem-icon-wrapper {
+  margin-bottom: 24px;
+  color: var(--accent-color);
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+}
+
+.problem-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.problem-card-desc {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 992px) {
+  .problem-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .problem-section {
+    padding: 60px 15px;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .problem-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .problem-stat {
+    display: none;
+  }
+
+  .problem-icon-wrapper {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 50%;
+  }
+
+  .problem-icon-wrapper svg {
+    width: 22px;
+    height: 22px;
+    color: #db2777;
+  }
+
+  .problem-card-content {
+    flex: 1;
+  }
+
+  .problem-card-title {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+
+  .problem-card-desc {
+    font-size: 0.88rem;
+  }
+}

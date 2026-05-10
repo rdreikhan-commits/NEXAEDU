@@ -1,0 +1,60 @@
+.immersive-section {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 50px;
+}
+
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.immersive-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 60px;
+  border-radius: 30px;
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  box-shadow: 0 0 60px rgba(124, 58, 237, 0.1);
+}
+
+.immersive-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.immersive-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .immersive-content {
+    padding: 40px 20px;
+    margin: 0 20px;
+  }
+  
+  .immersive-title {
+    font-size: 2.5rem;
+  }
+}

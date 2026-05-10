@@ -1,0 +1,133 @@
+/* Teacher Dashboard CSS */
+.teacher-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.teacher-stat-card {
+  background: #fff;
+  border: 1px solid #f0f0f8;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+
+.teacher-stat-card:hover {
+  box-shadow: 0 6px 24px rgba(108,99,255,0.1);
+}
+
+.teacher-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.teacher-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1;
+}
+
+.teacher-stat-label {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.teacher-section {
+  background: #fff;
+  border: 1px solid #f0f0f8;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: 20px;
+}
+
+.teacher-section h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f9f9fc;
+}
+
+.student-row:last-child { border-bottom: none; }
+
+.student-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.student-info { flex: 1; }
+.student-name { font-weight: 600; font-size: 0.9rem; color: #1a1a2e; }
+.student-sub { font-size: 0.78rem; color: #9ca3af; }
+
+.consult-request {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #f0f0f8;
+  margin-bottom: 10px;
+  background: #fafafa;
+  transition: background 0.2s;
+}
+
+.consult-request:hover { background: #f5f3ff; }
+
+.zoom-card {
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #f0f0f8;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.zoom-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badge-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .teacher-stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
