@@ -187,7 +187,7 @@ export default function TeacherPage() {
               </div>
             ) : consults.map(c => (
               <div key={c.id} className="consult-request">
-                <img src={`https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 20 + 10)}`} alt="" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                <img src={`https://i.pravatar.cc/150?img=${10 + (c.id % 20)}`} alt="" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
                     <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a1a2e' }}>{c.name}</span>

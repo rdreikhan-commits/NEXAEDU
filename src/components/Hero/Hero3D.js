@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 
 function AnimatedSphere() {
   const sphereRef = useRef();
@@ -44,10 +44,13 @@ function AnimatedSphere() {
   });
 
       const count = 500;
-      const positions = new Float32Array(count * 3);
-      for(let i = 0; i < count * 3; i++) {
-        positions[i] = (Math.random() - 0.5) * 10;
-  }
+      const positions = useMemo(() => {
+        const pos = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) {
+          pos[i] = (Math.random() - 0.5) * 10;
+        }
+        return pos;
+      }, []);
 
       return (
       <points ref={particlesRef}>
