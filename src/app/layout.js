@@ -7,7 +7,12 @@ const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
 export const metadata = {
   title: "NEXA EDU | AI Adaptive Learning Ecosystem",
   description: "Platform Pendidikan Masa Depan Berbasis Kurikulum Merdeka & AI Personalization. Transformasi digital pendidikan dengan adaptive learning, AI tutor, dan immersive experience.",
-  keywords: "Nexa Edu, AI Learning, Adaptive Learning, Kurikulum Merdeka, EdTech, Virtual Classroom, Education Ecosystem"
+  keywords: "Nexa Edu, AI Learning, Adaptive Learning, Kurikulum Merdeka, EdTech, Virtual Classroom, Education Ecosystem",
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({ children }) {
