@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import './Hero.css';
-import { Sparkles, Brain, Cpu } from 'lucide-react';
+import { Sparkles, Brain, Cpu, BookOpen, Calculator, BarChart, Binary, Code2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
@@ -12,6 +12,16 @@ export default function Hero() {
   return (
     <section className="hero-section">
       <div className="hero-bg-glow"></div>
+      
+      {/* Floating Educational Background Elements */}
+      <div className="hero-floating-elements">
+        <div className="float-icon float-1"><BookOpen size={42} /></div>
+        <div className="float-icon float-2"><Calculator size={38} /></div>
+        <div className="float-icon float-3"><BarChart size={46} /></div>
+        <div className="float-icon float-4"><Binary size={52} /></div>
+        <div className="float-icon float-5"><Code2 size={40} /></div>
+      </div>
+
       <div className="hero-container container">
         <div className="hero-content">
           <motion.div 

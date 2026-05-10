@@ -159,6 +159,17 @@
   flex-shrink: 0;
 }
 
+.finance-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
 @media (max-width: 900px) {
   .finance-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .finance-main-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .finance-kpi-grid { grid-template-columns: 1fr; }
 }

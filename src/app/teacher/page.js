@@ -91,7 +91,7 @@ export default function TeacherPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px' }}>
+      <div className="teacher-main-grid">
         {/* LEFT */}
         <div>
           {/* Mata Kuliah Saya */}

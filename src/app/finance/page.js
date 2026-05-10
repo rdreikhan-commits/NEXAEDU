@@ -101,7 +101,7 @@ export default function FinanceDashboard() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div className="finance-main-grid">
         {/* LEFT COLUMN */}
         <div>
           {/* Revenue by Category */}

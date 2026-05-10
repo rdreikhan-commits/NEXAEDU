@@ -48,7 +48,7 @@ export default function AdminDashboardPage() {
       <div className="dashboard-grid" style={{ marginTop: '30px' }}>
         <div className="panel-glass">
           <h3 style={{ marginBottom: '20px' }}>Real-time Telemetry</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <div className="metrics-grid-2">
             <div className="metric-box" style={{ borderColor: '#fecaca', background: '#fff' }}>
               <h4 style={{ color: '#ef4444', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}><Users size={16}/> Active Students</h4>
               <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#1a1a2e' }}>1,432</p>
