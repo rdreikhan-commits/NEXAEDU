@@ -221,6 +221,32 @@ export default function TeacherPage() {
               </div>
             ))}
           </div>
+
+          {/* Manajemen Modul & Kuis */}
+          <div className="teacher-section">
+            <h3><BookOpen size={18} color="#ec4899" /> Kelola Modul & Kuis Terpadu</h3>
+            <div style={{ padding: '16px', background: '#fdf2f8', border: '1px dashed #fbcfe8', borderRadius: '12px', textAlign: 'center', marginBottom: '16px' }}>
+              <p style={{ fontSize: '0.85rem', color: '#831843', marginBottom: '12px', lineHeight: 1.5 }}>Upload materi PDF dan buat bank soal kuis baru untuk menguji pemahaman mahasiswa setelah menonton video.</p>
+              <button onClick={() => setShowModal({ type: 'add_quiz', data: null })} style={{ padding: '10px 16px', background: '#db2777', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}>
+                <PlusCircle size={16} /> Buat Kuis Baru
+              </button>
+            </div>
+            
+            <div className="consult-request" style={{ padding: '12px', background: '#fff', border: '1px solid #f0f0f8', cursor: 'pointer' }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a1a2e' }}>Kuis: Machine Learning Fundamentals</p>
+                <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>15 Soal Pilihan Ganda</p>
+              </div>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#16a34a', background: '#dcfce7', padding: '4px 8px', borderRadius: '8px' }}>Aktif</span>
+            </div>
+            <div className="consult-request" style={{ padding: '12px', background: '#fff', border: '1px solid #f0f0f8', cursor: 'pointer' }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a1a2e' }}>Kuis: Struktur Data</p>
+                <p style={{ fontSize: '0.75rem', color: '#6b7280' }}>Draf · Belum ada soal</p>
+              </div>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#d97706', background: '#fef3c7', padding: '4px 8px', borderRadius: '8px' }}>Draf</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -239,6 +265,7 @@ export default function TeacherPage() {
                 {showModal.type === 'add_module' ? 'Tambah Materi Baru' : 
                  showModal.type === 'zoom' ? 'Mulai Zoom Session' : 
                  showModal.type === 'schedule_zoom' ? 'Jadwalkan Zoom Baru' :
+                 showModal.type === 'add_quiz' ? 'Buat Kuis Baru' :
                  'Balas Konsultasi'}
               </h3>
               <button onClick={() => setShowModal({ type: null, data: null })} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af' }}><X size={20}/></button>
@@ -266,6 +293,22 @@ export default function TeacherPage() {
                 <input type="text" placeholder="Topik Sesi" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
                 <input type="datetime-local" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
                 <button onClick={() => { alert('Sesi Zoom berhasil dijadwalkan!'); setShowModal({ type: null, data: null }); }} style={{ padding: '12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Buat Undangan</button>
+              </div>
+            )}
+
+            {showModal.type === 'add_quiz' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div style={{ padding: '12px', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '8px', fontSize: '0.85rem', color: '#d97706', display: 'flex', gap: '10px' }}>
+                  <AlertCircle size={18} style={{ flexShrink: 0 }} />
+                  Kuis ini akan terhubung secara otomatis setelah mahasiswa menyelesaikan menonton video dan membaca modul PDF.
+                </div>
+                <input type="text" placeholder="Judul Kuis (Cth: Kuis Algoritma Dasar)" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <select style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }}>
+                  <option>Pilih Modul Tujuan</option>
+                  {courses.map(c => <option key={c.name}>{c.name}</option>)}
+                </select>
+                <input type="number" placeholder="Jumlah Pertanyaan (Bank Soal)" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', width: '100%' }} />
+                <button onClick={() => { alert('Draf Kuis berhasil dibuat! Anda sekarang bisa memasukkan soal.'); setShowModal({ type: null, data: null }); }} style={{ padding: '12px', background: '#db2777', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Buat Draf Kuis</button>
               </div>
             )}
 

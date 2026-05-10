@@ -55,6 +55,16 @@ export default function TeacherLayout({ children }) {
             <LogOut size={18} /> Keluar
           </Link>
         </nav>
+
+        {/* Kotak Bantuan untuk mengisi kekosongan sidebar */}
+        <div style={{ marginTop: 'auto', background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', padding: '20px', borderRadius: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 25px rgba(124,58,237,0.3)' }}>
+          <div style={{ background: 'rgba(255,255,255,0.2)', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <HelpCircle size={24} color="#fff" />
+          </div>
+          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '6px' }}>Butuh Bantuan?</h4>
+          <p style={{ fontSize: '0.8rem', opacity: 0.9, marginBottom: '16px', lineHeight: 1.4 }}>Tim Support NEXA siap membantu kendala teknis Anda.</p>
+          <button style={{ width: '100%', padding: '8px', background: '#fff', color: '#7c3aed', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>Hubungi Support</button>
+        </div>
       </aside>
 
       <main className="dashboard-main">
